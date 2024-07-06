@@ -12,3 +12,10 @@ class UserSerializer(serializers.ModelSerializer):
         user = User.objects.create_user(**validated_data)
         return user
 
+    def update(self, instance, validated_data):
+        password = validated_data.pop('password', None)     # Извлечение пароля из валидированных данных, если он есть
+        instance = super().update(instance, validated_data)     # Обновление остальных полей через метод update родительского класса
+        if password:
+            instance.set_password(password)     # Установка хешированного пароля
+            instance.save()
+            return instance
