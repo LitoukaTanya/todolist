@@ -19,3 +19,11 @@ class UserSerializer(serializers.ModelSerializer):
             instance.set_password(password)     # Установка хешированного пароля
             instance.save()
             return instance
+
+
+class UserSoftDeleteSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = User
+        fields = ('is_active',)
+        extra_kwargs = {'is_active': {'read_only': True}}
+
