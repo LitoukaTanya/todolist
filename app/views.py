@@ -36,3 +36,11 @@ class TaskListByStatus(generics.ListAPIView):
             return Task.objects.filter(status=status)
         else:
             return Task.objects.none()
+
+
+class TaskListByCategory(generics.ListAPIView):
+    serializer_class = TaskSerializer
+
+    def get_queryset(self):
+        category = self.kwargs['category_id']
+        return Task.objects.filter(category=category)
