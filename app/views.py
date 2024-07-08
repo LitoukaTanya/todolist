@@ -24,3 +24,15 @@ class TaskListView(generics.ListAPIView):
     def get_queryset(self):
         user = self.request.user
         return Task.objects.filter(created_by=user, deleted=False)
+
+
+class TaskListByStatus(generics.ListAPIView):
+    serializer_class = TaskSerializer
+    # permission_classes = [IsAuthenticated]
+
+    def get_queryset(self):
+        status = self.request.query_params.get('status')
+        if status:
+            return Task.objects.filter(status=status)
+        else:
+            return Task.objects.none()
