@@ -44,3 +44,11 @@ class TaskListByCategory(generics.ListAPIView):
     def get_queryset(self):
         category = self.kwargs['category_id']
         return Task.objects.filter(category=category)
+
+
+class TaskListByPriority(generics.ListAPIView):
+    serializer_class = TaskSerializer
+
+    def get_queryset(self):
+        priority = self.kwargs['priority_id']
+        return Task.objects.filter(priority=priority)
