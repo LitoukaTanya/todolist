@@ -8,6 +8,7 @@ from app.models import Task
 from app.serializers import TaskSerializer
 
 
+# Представление для создания новой задачи
 class TaskCreateView(APIView):
     def post(self, request):
         serializer = TaskSerializer(data=request.data)
@@ -17,6 +18,7 @@ class TaskCreateView(APIView):
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
 
+# Представление для получения всех задач пользователя
 class TaskListView(generics.ListAPIView):
     serializer_class = TaskSerializer
     permission_classes = [IsAuthenticated]
@@ -26,8 +28,10 @@ class TaskListView(generics.ListAPIView):
         return Task.objects.filter(created_by=user, deleted=False)
 
 
+# Представление для получения задач пользователя по статусу
 class TaskListByStatus(generics.ListAPIView):
     serializer_class = TaskSerializer
+
     # permission_classes = [IsAuthenticated]
 
     def get_queryset(self):
@@ -38,6 +42,7 @@ class TaskListByStatus(generics.ListAPIView):
             return Task.objects.none()
 
 
+# Представление для получения задач пользователя по категории
 class TaskListByCategory(generics.ListAPIView):
     serializer_class = TaskSerializer
 
@@ -46,9 +51,19 @@ class TaskListByCategory(generics.ListAPIView):
         return Task.objects.filter(category=category)
 
 
+# Представление для получения задач пользователя по приоритету
 class TaskListByPriority(generics.ListAPIView):
     serializer_class = TaskSerializer
 
     def get_queryset(self):
         priority = self.kwargs['priority_id']
         return Task.objects.filter(priority=priority)
+
+
+# Представление для получения конкретной задачи пользователя по ID
+class TaskUserById(generics.RetrieveAPIView):
+    serializer_class = TaskSerializer
+
+    def get_queryset(self):
+        user = self.request.user
+        return Task.objects.filter(created_by=user, deleted=False)
