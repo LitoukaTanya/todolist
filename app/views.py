@@ -77,3 +77,17 @@ class UpdateTaskView(generics.RetrieveUpdateAPIView):
 class DeleteTaskView(generics.RetrieveDestroyAPIView):
     queryset = Task.objects.all()
     serializer_class = TaskSerializer
+    permission_classes = [IsAuthenticated]
+
+    def delete(self, request, *args, **kwargs):
+        instance = self.get_object()
+        # Проверяем, является ли пользователь создателем задачи
+        if request.user == instance.created_by:
+            instance.soft_delete()
+            return Response(status=status.HTTP_204_NO_CONTENT)
+        # Проверяем, является ли пользователь администратором
+        if request.user.is_staff:
+            instance.hard_delete()
+            return Response(status=status.HTTP_204_NO_CONTENT)
+        # Если пользователь не создатель и не администратор, возвращаем ошибку доступа
+        return Response(status=status.HTTP_403_FORBIDDEN)
