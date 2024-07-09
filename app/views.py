@@ -5,7 +5,7 @@ from rest_framework.response import Response
 from rest_framework.views import APIView
 
 from app.models import Task
-from app.serializers import TaskSerializer
+from app.serializers import TaskSerializer, CategorySerializer
 
 
 # Представление для создания новой задачи
@@ -91,3 +91,12 @@ class DeleteTaskView(generics.RetrieveDestroyAPIView):
             return Response(status=status.HTTP_204_NO_CONTENT)
         # Если пользователь не создатель и не администратор, возвращаем ошибку доступа
         return Response(status=status.HTTP_403_FORBIDDEN)
+
+
+class CategoryCreateView(APIView):
+    def post(self, request):
+        serializer = CategorySerializer(data=request.data)
+        if serializer.is_valid():
+            serializer.save()
+            return Response(serializer.data, status=status.HTTP_201_CREATED)
+        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
