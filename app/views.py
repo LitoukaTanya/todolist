@@ -67,3 +67,8 @@ class TaskUserById(generics.RetrieveAPIView):
     def get_queryset(self):
         user = self.request.user
         return Task.objects.filter(created_by=user, deleted=False)
+
+
+class UpdateTaskView(generics.RetrieveUpdateAPIView):
+    queryset = Task.objects.all()
+    serializer_class = TaskSerializer
