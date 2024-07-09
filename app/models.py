@@ -1,3 +1,5 @@
+from datetime import timezone
+
 from django.contrib.auth.models import User
 from django.db import models
 
@@ -43,6 +45,14 @@ class Task(models.Model):
     deleted = models.BooleanField(default=False)
     category = models.ForeignKey(Category, on_delete=models.CASCADE)
     priority = models.ForeignKey(Priority, on_delete=models.CASCADE)
+
+    def soft_delete(self):
+        self.deleted = True
+        self.deleted_at = timezone.now()
+        self.save()
+
+    def hard_delete(self):
+        super(Task, self).delete()
 
     def __str__(self):
         return self.title
