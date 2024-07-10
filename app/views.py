@@ -134,3 +134,8 @@ class PriorityCreateView(generics.CreateAPIView):
 class PriorityGetById(generics.RetrieveAPIView):
     queryset = Priority.objects.all()
     serializer_class = PrioritySerializer
+
+
+class PriorityUpdateView(generics.UpdateAPIView):
+    queryset = Priority.objects.all()
+    serializer_class = PrioritySerializer
