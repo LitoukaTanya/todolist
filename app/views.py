@@ -129,3 +129,8 @@ class DeleteCategoryView(APIView):
 class PriorityCreateView(generics.CreateAPIView):
     queryset = Priority.objects.all()
     serializer_class = PrioritySerializer
+
+
+class PriorityGetById(generics.RetrieveAPIView):
+    queryset = Priority.objects.all()
+    serializer_class = PrioritySerializer
