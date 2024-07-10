@@ -4,8 +4,8 @@ from rest_framework.permissions import IsAuthenticated
 from rest_framework.response import Response
 from rest_framework.views import APIView
 
-from app.models import Task, Category
-from app.serializers import TaskSerializer, CategorySerializer
+from app.models import Task, Category, Priority
+from app.serializers import TaskSerializer, CategorySerializer, PrioritySerializer
 
 
 # Представление для создания новой задачи
@@ -125,3 +125,7 @@ class DeleteCategoryView(APIView):
             category.soft_delete()
             return Response(status=status.HTTP_204_NO_CONTENT)
 
+
+class PriorityCreateView(generics.CreateAPIView):
+    queryset = Priority.objects.all()
+    serializer_class = PrioritySerializer
