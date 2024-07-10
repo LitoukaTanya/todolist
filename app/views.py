@@ -8,14 +8,9 @@ from app.models import Task, Category, Priority
 from app.serializers import TaskSerializer, CategorySerializer, PrioritySerializer
 
 
-# Представление для создания новой задачи
-class TaskCreateView(APIView):
-    def post(self, request):
-        serializer = TaskSerializer(data=request.data)
-        if serializer.is_valid():
-            serializer.save()
-            return Response(serializer.data, status=status.HTTP_201_CREATED)
-        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+class TaskCreateView(generics.CreateAPIView):
+    queryset = Task.objects.all()
+    serializer_class = TaskSerializer
 
 
 # Представление для получения всех задач пользователя
