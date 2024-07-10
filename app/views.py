@@ -139,3 +139,17 @@ class PriorityGetById(generics.RetrieveAPIView):
 class PriorityUpdateView(generics.UpdateAPIView):
     queryset = Priority.objects.all()
     serializer_class = PrioritySerializer
+
+
+class PriorityDeleteView(APIView):
+    def delete(self, request, pk, *args, **kwargs):
+        try:
+            priority = Priority.objects.get(pk=pk)
+        except Priority.DoesNotExist:
+            return Response(status=status.HTTP_404_NOT_FOUND)
+        if request.user.is_staff:
+            priority.hard_delete()
+            return Response(status=status.HTTP_204_NO_CONTENT)
+        else:
+            priority.soft_delete()
+            return Response(status=status.HTTP_204_NO_CONTENT)

@@ -30,6 +30,14 @@ class Priority(models.Model):
     deleted_at = models.DateTimeField(blank=True, null=True)
     deleted = models.BooleanField(default=False)
 
+    def soft_delete(self):
+        self.deleted = True
+        self.deleted_at = timezone.now()
+        self.save()
+
+    def hard_delete(self):
+        super(Priority, self).delete()
+
     def __str__(self):
         return self.name
 
