@@ -110,3 +110,18 @@ class GetCategoryById(generics.RetrieveAPIView):
 class UpdateCategoryView(generics.UpdateAPIView):
     queryset = Category.objects.all()
     serializer_class = CategorySerializer
+
+
+class DeleteCategoryView(APIView):
+    def delete(self, request, pk, *args, **kwargs):
+        try:
+            category = Category.objects.get(pk=pk)
+        except Category.DoesNotExist:
+            return Response(status=status.HTTP_404_NOT_FOUND)
+        if request.user.is_staff:
+            category.hard_delete()
+            return Response(status=status.HTTP_204_NO_CONTENT)
+        else:
+            category.soft_delete()
+            return Response(status=status.HTTP_204_NO_CONTENT)
+
