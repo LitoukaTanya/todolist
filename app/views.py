@@ -86,31 +86,29 @@ class DeleteTaskView(APIView):
             return Response(status=status.HTTP_403_FORBIDDEN)
 
 
-class CategoryCreateView(APIView):
-    def post(self, request):
-        serializer = CategorySerializer(data=request.data)
-        if serializer.is_valid():
-            serializer.save()
-            return Response(serializer.data, status=status.HTTP_201_CREATED)
-        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+# представление для создания категории
+class CategoryCreateView(generics.CreateAPIView):
+    queryset = Category.objects.all()
+    serializer_class = CategorySerializer
 
 
+# представление для получения категории по ID
 class GetCategoryById(generics.RetrieveAPIView):
     queryset = Category.objects.all()
     serializer_class = CategorySerializer
 
 
+# представление для изменения категории
 class UpdateCategoryView(generics.UpdateAPIView):
     queryset = Category.objects.all()
     serializer_class = CategorySerializer
 
 
+# представление для удаления конкретной категории
 class DeleteCategoryView(APIView):
     def delete(self, request, pk, *args, **kwargs):
-        try:
-            category = Category.objects.get(pk=pk)
-        except Category.DoesNotExist:
-            return Response(status=status.HTTP_404_NOT_FOUND)
+        category = get_object_or_404(Category, pk=pk)
+
         if request.user.is_staff:
             category.hard_delete()
             return Response(status=status.HTTP_204_NO_CONTENT)
@@ -119,27 +117,28 @@ class DeleteCategoryView(APIView):
             return Response(status=status.HTTP_204_NO_CONTENT)
 
 
+# представление для создания приоритете
 class PriorityCreateView(generics.CreateAPIView):
     queryset = Priority.objects.all()
     serializer_class = PrioritySerializer
 
 
+# представление для получения приоритета по ID
 class PriorityGetById(generics.RetrieveAPIView):
     queryset = Priority.objects.all()
     serializer_class = PrioritySerializer
 
 
+# представление для изменения приоритета
 class PriorityUpdateView(generics.UpdateAPIView):
     queryset = Priority.objects.all()
     serializer_class = PrioritySerializer
 
 
+# представление для удаления конкретного приоритета
 class PriorityDeleteView(APIView):
     def delete(self, request, pk, *args, **kwargs):
-        try:
-            priority = Priority.objects.get(pk=pk)
-        except Priority.DoesNotExist:
-            return Response(status=status.HTTP_404_NOT_FOUND)
+        priority = get_object_or_404(Priority, pk=pk)
         if request.user.is_staff:
             priority.hard_delete()
             return Response(status=status.HTTP_204_NO_CONTENT)
