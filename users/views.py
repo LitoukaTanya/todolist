@@ -35,7 +35,6 @@ class UserUpdate(generics.RetrieveUpdateAPIView):
 
 # представление для удаления пользователя
 class UserDeleteView(APIView):
-    permission_classes = [IsAuthenticated]
 
     def delete(self, request, pk):
         user = get_object_or_404(User, pk=pk)

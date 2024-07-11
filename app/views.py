@@ -18,7 +18,6 @@ class TaskCreateView(generics.CreateAPIView):
 # Представление для получения всех задач пользователя
 class TaskListView(generics.ListAPIView):
     serializer_class = TaskSerializer
-    permission_classes = [IsAuthenticated]
 
     def get_queryset(self):
         user = self.request.user
