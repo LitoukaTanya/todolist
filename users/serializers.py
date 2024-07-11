@@ -8,10 +8,6 @@ class UserSerializer(serializers.ModelSerializer):
         fields = ('id', 'username', 'email', 'password')
         extra_kwargs = {'password': {'write_only': True, 'min_length': 5}}  # поле password доступно только для записи
 
-    def create(self, validated_data):
-        user = User.objects.create_user(**validated_data)
-        return user
-
     def update(self, instance, validated_data):
         password = validated_data.pop('password', None)     # Извлечение пароля из валидированных данных, если он есть
         instance = super().update(instance, validated_data)     # Обновление остальных полей через метод update родительского класса
