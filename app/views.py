@@ -1,11 +1,10 @@
 from django.shortcuts import render
 from rest_framework import status, generics
-from rest_framework.permissions import IsAuthenticated
 from rest_framework.response import Response
 from rest_framework.views import APIView
 from django.shortcuts import get_object_or_404
-
 from app.models import Task, Category, Priority
+from app.permissions import IsOwnerOrAdmin, IsAdminOrReadOnly
 from app.serializers import TaskSerializer, CategorySerializer, PrioritySerializer
 
 
@@ -15,12 +14,14 @@ class TaskCreateView(generics.CreateAPIView):
     serializer_class = TaskSerializer
 
 
-# Представление для получения всех задач пользователя
+# Представление для получения всех задач
 class TaskListView(generics.ListAPIView):
     serializer_class = TaskSerializer
 
     def get_queryset(self):
         user = self.request.user
+        if user.is_staff:
+            return Task.objects.filter(deleted=False)
         return Task.objects.filter(created_by=user, deleted=False)
 
 
@@ -37,44 +38,52 @@ class TaskListView(generics.ListAPIView):
 #         return Task.objects.none()
 
 
-# Представление для получения задач пользователя по категории
+# Представление для получения задач по категории
 class TaskListByCategory(generics.ListAPIView):
     serializer_class = TaskSerializer
 
     def get_queryset(self):
-        category = self.kwargs['pk']
-        return Task.objects.filter(category=category)
+        category_id = self.kwargs['pk']  # Получаем id категории из URL
+        user = self.request.user
+        if user.is_staff:
+            return Task.objects.filter(category_id=category_id, deleted=False)
+        return Task.objects.filter(category_id=category_id, created_by=user, deleted=False)
 
 
-# Представление для получения задач пользователя по приоритету
+# Представление для получения задач по приоритету
 class TaskListByPriority(generics.ListAPIView):
     serializer_class = TaskSerializer
 
     def get_queryset(self):
-        priority = self.kwargs['pk']
-        return Task.objects.filter(priority=priority)
+        priority_id = self.kwargs['pk']
+        user = self.request.user
+        if user.is_staff:
+            return Task.objects.filter(priority_id=priority_id, deleted=False)
+        return Task.objects.filter(priority_id=priority_id, created_by=user, deleted=False)
 
 
 # Представление для получения конкретной задачи пользователя по ID
 class TaskUserById(generics.RetrieveAPIView):
     serializer_class = TaskSerializer
+    permission_classes = [IsOwnerOrAdmin]
 
     def get_queryset(self):
-        user = self.request.user
-        return Task.objects.filter(created_by=user, deleted=False)
+        return Task.objects.filter(deleted=False)
 
 
 # представление для обновления конкретной задачи
 class UpdateTaskView(generics.RetrieveUpdateAPIView):
     queryset = Task.objects.all()
     serializer_class = TaskSerializer
+    permission_classes = [IsOwnerOrAdmin]
 
 
 # представление для удаление конкретной задачи
 class DeleteTaskView(APIView):
+
     def delete(self, request, pk, *args, **kwargs):
         task = get_object_or_404(Task, pk=pk)
-        if request.user == task.created_by:
+        if request.user == task.created_by or request.user.is_staff:
             if request.user.is_staff:
                 task.hard_delete()
                 return Response(status=status.HTTP_204_NO_CONTENT)
@@ -95,12 +104,14 @@ class CategoryCreateView(generics.CreateAPIView):
 class GetCategoryById(generics.RetrieveAPIView):
     queryset = Category.objects.all()
     serializer_class = CategorySerializer
+    permission_classes = [IsAdminOrReadOnly]
 
 
 # представление для изменения категории
 class UpdateCategoryView(generics.UpdateAPIView):
     queryset = Category.objects.all()
     serializer_class = CategorySerializer
+    permission_classes = [IsAdminOrReadOnly]
 
 
 # представление для удаления конкретной категории
@@ -126,12 +137,14 @@ class PriorityCreateView(generics.CreateAPIView):
 class PriorityGetById(generics.RetrieveAPIView):
     queryset = Priority.objects.all()
     serializer_class = PrioritySerializer
+    permission_classes = [IsAdminOrReadOnly]
 
 
 # представление для изменения приоритета
 class PriorityUpdateView(generics.UpdateAPIView):
     queryset = Priority.objects.all()
     serializer_class = PrioritySerializer
+    permission_classes = [IsAdminOrReadOnly]
 
 
 # представление для удаления конкретного приоритета
