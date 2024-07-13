@@ -5,6 +5,7 @@ from rest_framework.response import Response
 from rest_framework.views import APIView
 from django.shortcuts import get_object_or_404
 
+from app.permissions import IsAdminOrReadOnly, IsProfileOwnerOrAdmin
 from .serializers import UserSerializer, UserSoftDeleteSerializer
 
 
@@ -24,12 +25,14 @@ class UserList(generics.ListAPIView):
 class UserDetail(generics.RetrieveAPIView):
     queryset = User.objects.all()
     serializer_class = UserSerializer
+    permission_classes = [IsProfileOwnerOrAdmin]
 
 
 # представление для изменения пользователя
 class UserUpdate(generics.RetrieveUpdateAPIView):
     queryset = User.objects.all()
     serializer_class = UserSerializer
+    permission_classes = [IsProfileOwnerOrAdmin]
 
 
 # представление для удаления пользователя
