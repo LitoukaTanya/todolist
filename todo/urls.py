@@ -3,6 +3,7 @@ from django.urls import path, include
 from django.conf.urls.static import static
 from django.conf import settings
 
+from app.views import task_list
 
 urlpatterns = [
     path('admin/', admin.site.urls),
@@ -11,6 +12,9 @@ urlpatterns = [
     path('api/dj-rest-auth/', include('dj_rest_auth.urls')),    # конечная точка для входа,выхода и сброса пароля
     path('api-auth/', include('rest_framework.urls')),
 
+]
+urlpatterns += [
+    path('', task_list, name='task_list'),
 ]
 
 urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)

@@ -1,12 +1,13 @@
-from django.shortcuts import render
+from django.contrib.sites import requests
+from django.shortcuts import render, get_object_or_404
 from rest_framework import status, generics
 from rest_framework.response import Response
 from rest_framework.views import APIView
-from django.shortcuts import get_object_or_404
 from app.models import Task, Category, Priority
 from app.permissions import IsOwnerOrAdmin, IsAdminOrReadOnly
 from app.serializers import TaskSerializer, CategorySerializer, PrioritySerializer
-
+from django.contrib.auth.decorators import login_required
+import requests
 
 # представление для создания задачи
 class TaskCreateView(generics.CreateAPIView):
@@ -157,3 +158,15 @@ class PriorityDeleteView(APIView):
         else:
             priority.soft_delete()
             return Response(status=status.HTTP_204_NO_CONTENT)
+
+
+@login_required
+def task_list(request):
+    token = request.user.auth_token.key  # Получаем токен пользователя
+    headers = {
+        'Authorization': f'Token {token}'
+    }
+    response = requests.get('http://localhost:8000/api/task/listtask/', headers=headers)
+    tasks = response.json() if response.status_code == 200 else []
+
+    return render(request, 'app/task_list.html', {'tasks': tasks})

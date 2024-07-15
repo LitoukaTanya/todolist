@@ -2,7 +2,7 @@ from django.urls import path
 
 from app.views import TaskCreateView, TaskListView, TaskListByCategory, TaskListByPriority, \
     TaskUserById, UpdateTaskView, DeleteTaskView, CategoryCreateView, GetCategoryById, UpdateCategoryView, \
-    DeleteCategoryView, PriorityCreateView, PriorityGetById, PriorityUpdateView, PriorityDeleteView
+    DeleteCategoryView, PriorityCreateView, PriorityGetById, PriorityUpdateView, PriorityDeleteView, task_list
 
 urlpatterns = [
     path('create/', TaskCreateView.as_view(), name='task_create'),
