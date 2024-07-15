@@ -3,12 +3,6 @@ from rest_framework import serializers
 from app.models import Task, Category, Priority
 
 
-class TaskSerializer(serializers.ModelSerializer):
-    class Meta:
-        model = Task
-        fields = '__all__'
-
-
 class CategorySerializer(serializers.ModelSerializer):
     class Meta:
         model = Category
@@ -18,4 +12,13 @@ class CategorySerializer(serializers.ModelSerializer):
 class PrioritySerializer(serializers.ModelSerializer):
     class Meta:
         model = Priority
+        fields = '__all__'
+
+
+class TaskSerializer(serializers.ModelSerializer):
+    category = CategorySerializer()
+    priority = PrioritySerializer()
+
+    class Meta:
+        model = Task
         fields = '__all__'

@@ -170,3 +170,14 @@ def task_list(request):
     tasks = response.json() if response.status_code == 200 else []
 
     return render(request, 'app/task_list.html', {'tasks': tasks})
+
+@login_required
+def task_detail(request, pk):
+    token = request.user.auth_token.key
+    headers = {
+        'Authorization': f'Token {token}'
+    }
+    response = requests.get(f'http://localhost:8000/api/task/{pk}/', headers=headers)
+    task = response.json() if response.status_code == 200 else None
+
+    return render(request, 'app/task_detail.html', {'task': task})

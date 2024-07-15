@@ -4,31 +4,33 @@
 <head>
     <meta charset="UTF-8">
     <title>Task List</title>
-    <link rel="stylesheet" href="{% static 'app/styles.css' %}"> <!-- Подключение CSS, если необходимо -->
+    <link rel="stylesheet" href="{% static 'css/styles.css' %}"> 
 </head>
 <body>
-    <h1>Task List</h1>
-    <table border="1">
-        <thead>
-            <tr>
-                <th>Title</th>
-                <th>Description</th>
-                <th>Status</th>
-                <th>Category</th>
-                <th>Priority</th>
-            </tr>
-        </thead>
-        <tbody>
-            {% for task in tasks %}
-            <tr>
-                <td>{{ task.title }}</td>
-                <td>{{ task.description }}</td>
-                <td>{{ task.status }}</td>
-                <td>{{ task.category.name }}</td>
-                <td>{{ task.priority.name }}</td>
-            </tr>
-            {% endfor %}
-        </tbody>
-    </table>
+    <div class="container">
+        <h1>Task List</h1>
+        <table border="1">
+            <thead>
+                <tr>
+                    <th>Title</th>
+                    <th>Description</th>
+                    <th>Status</th>
+                    <th>Category</th>
+                    <th>Priority</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for task in tasks %}
+                <tr>
+                    <td><a href="{% url 'task_detail' task.id %}">{{ task.title }}</a></td>
+                    <td>{{ task.description }}</td>
+                    <td>{{ task.status }}</td>
+                    <td>{{ task.category.name }}</td>
+                    <td>{{ task.priority.name }}</td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
 </body>
 </html>
