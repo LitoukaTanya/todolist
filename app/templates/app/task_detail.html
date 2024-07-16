@@ -31,9 +31,13 @@
                 <th>Priority</th>
                 <td>{{ task.priority.name }}</td>
             </tr>
+            <tr>
+                <th>Completed</th>
+                <td>{{ task.completed_at}}</td>
+            </tr>
         </table>
         
-        <p><a href="{% url 'task_update' task.id %}">Edit Task</a></p>
+        <p><a href="{% url 'update_task' task.id %}">Edit Task</a></p>
         {% else %}
         <p>Task not found or access denied.</p>
         {% endif %}

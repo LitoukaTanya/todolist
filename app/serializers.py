@@ -16,9 +16,11 @@ class PrioritySerializer(serializers.ModelSerializer):
 
 
 class TaskSerializer(serializers.ModelSerializer):
-    category = CategorySerializer()
-    priority = PrioritySerializer()
+    category = CategorySerializer(read_only=True)
+    priority = PrioritySerializer(read_only=True)
 
     class Meta:
         model = Task
-        fields = '__all__'
+        fields = ('id', 'title', 'description', 'status', 'completed', 'created_at', 'completed_at', 'updated_at',
+                  'deleted_at', 'deleted', 'created_by', 'category', 'priority')
+

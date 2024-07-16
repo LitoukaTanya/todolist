@@ -1,13 +1,16 @@
 from django.contrib.sites import requests
-from django.shortcuts import render, get_object_or_404
+from django.shortcuts import render, get_object_or_404, redirect
 from rest_framework import status, generics
 from rest_framework.response import Response
 from rest_framework.views import APIView
+
+from app.form import TaskForm
 from app.models import Task, Category, Priority
 from app.permissions import IsOwnerOrAdmin, IsAdminOrReadOnly
 from app.serializers import TaskSerializer, CategorySerializer, PrioritySerializer
 from django.contrib.auth.decorators import login_required
 import requests
+
 
 # представление для создания задачи
 class TaskCreateView(generics.CreateAPIView):
@@ -171,6 +174,7 @@ def task_list(request):
 
     return render(request, 'app/task_list.html', {'tasks': tasks})
 
+
 @login_required
 def task_detail(request, pk):
     token = request.user.auth_token.key
@@ -181,3 +185,18 @@ def task_detail(request, pk):
     task = response.json() if response.status_code == 200 else None
 
     return render(request, 'app/task_detail.html', {'task': task})
+
+def task_update(request, pk):
+    task = get_object_or_404(Task, pk=pk)
+
+    if request.method == 'POST':
+        form = TaskForm(request.POST, instance=task)
+        if form.is_valid():
+            form.save()
+
+            # Перенаправление на страницу деталей задачи
+            return redirect('task_detail', pk=pk)
+    else:
+        form = TaskForm(instance=task)
+
+    return render(request, 'app/task_update.html', {'form': form, 'task': task})

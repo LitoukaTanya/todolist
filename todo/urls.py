@@ -3,7 +3,7 @@ from django.urls import path, include
 from django.conf.urls.static import static
 from django.conf import settings
 
-from app.views import task_list, task_detail
+from app.views import task_list, task_detail, task_update
 
 urlpatterns = [
     path('admin/', admin.site.urls),
@@ -16,6 +16,7 @@ urlpatterns = [
 urlpatterns += [
     path('', task_list, name='task_list'),
     path('task/<int:pk>/', task_detail, name='task_detail'),
+    path('task/update/<int:pk>/', task_update, name='update_task'),
 ]
 
 urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
