@@ -13,7 +13,7 @@ urlpatterns = [
     path('api/task/', include('app.urls')),
     path('api/dj-rest-auth/', include('dj_rest_auth.urls')),    # конечная точка для входа,выхода и сброса пароля
     path('api-auth/', include('rest_framework.urls')),
-    path('login/', auth_views.LoginView.as_view(), name='login'),
+    path('login/', auth_views.LoginView.as_view(template_name='login.html'), name='login'),
     path('logout/', auth_views.LogoutView.as_view(), name='logout'),
 
 ]

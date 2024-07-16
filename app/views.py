@@ -202,6 +202,7 @@ def task_update(request, pk):
 
     return render(request, 'app/task_update.html', {'form': form, 'task': task})
 
+
 @login_required
 def task_delete(request, pk):
     task = get_object_or_404(Task, pk=pk)

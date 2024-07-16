@@ -1,12 +1,11 @@
+{% extends 'app/base.html' %}
 {% load static %}
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <title>Task Detail</title>
+
+{% block style %}
     <link rel="stylesheet" href="{% static 'css/styles.css' %}">
-</head>
-<body>
+{% endblock %}
+
+{% block content %}
     <div class="container">
         <h1>Task Detail</h1>
         {% if task %}
@@ -43,8 +42,7 @@
         {% endif %}
         <form action="{% url 'delete_task' task.id %}" method="post" onsubmit="return confirm('Are you sure you want to delete this task?');">
             {% csrf_token %}
-            <button type="submit">Delete Task</button>
+            <button type="submit" class="btn btn-danger">Delete Task</button>
         </form>
     </div>
-</body>
-</html>
+{% endblock %}
