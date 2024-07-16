@@ -41,6 +41,10 @@
         {% else %}
         <p>Task not found or access denied.</p>
         {% endif %}
+        <form action="{% url 'delete_task' task.id %}" method="post" onsubmit="return confirm('Are you sure you want to delete this task?');">
+            {% csrf_token %}
+            <button type="submit">Delete Task</button>
+        </form>
     </div>
 </body>
 </html>

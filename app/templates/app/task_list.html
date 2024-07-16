@@ -9,7 +9,8 @@
 <body>
     <div class="container">
         <h1>Task List</h1>
-        <table border="1">
+        {% if tasks %}        
+            <table border="1">
             <thead>
                 <tr>
                     <th>Title</th>
@@ -31,6 +32,9 @@
                 {% endfor %}
             </tbody>
         </table>
+        {% else %}
+            <p>Список задач отсутствует</p>
+        {% endif %}
     </div>
 </body>
 </html>

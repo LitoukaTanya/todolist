@@ -186,6 +186,7 @@ def task_detail(request, pk):
 
     return render(request, 'app/task_detail.html', {'task': task})
 
+
 def task_update(request, pk):
     task = get_object_or_404(Task, pk=pk)
 
@@ -200,3 +201,19 @@ def task_update(request, pk):
         form = TaskForm(instance=task)
 
     return render(request, 'app/task_update.html', {'form': form, 'task': task})
+
+@login_required
+def task_delete(request, pk):
+    task = get_object_or_404(Task, pk=pk)
+    if request.method == 'POST':
+        token = request.user.auth_token.key
+        headers = {
+            'Authorization': f'Token {token}'
+        }
+        response = requests.delete(f'http://localhost:8000/api/task/delete/{pk}/', headers=headers)
+        if response.status_code == 204:
+            return redirect('task_list')
+        else:
+            return redirect('task_detail', pk=pk)
+    else:
+        return redirect('task_detail', pk=pk)
