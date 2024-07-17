@@ -1,0 +1,48 @@
+div.container {
+    width: 70%;
+    max-width: 500px;
+    text-align: center;
+    border: 1px solid #ccc;
+    padding: 20px;
+    border-radius: 10px;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+    margin-top: 90px;
+}
+
+h1 {
+    text-align: center; /* Центрируем заголовок */
+    margin-bottom: 10px; /*отступ снизу заголовка */
+    font-size: 1.5rem; /*размер шрифта заголовка */
+}
+
+form {
+    margin-top: 10px; /*отступ сверху формы */
+}
+
+.form-group {
+    margin-bottom: 10px; /*отступ снизу для группы полей формы */
+}
+
+form label {
+    font-weight: bold; /* Жирный шрифт для меток полей */
+    font-size: 0.9rem; /* размер шрифта меток */
+}
+
+
+form input[type="text"],
+form textarea {
+    width: 70%; /*заполнение доступной ширины */
+    padding: 8px; /*внутренний отступ полей */
+    margin-bottom: 10px; /*отступ снизу между полями */
+    border: 1px solid #ccc; /* Рамка полей */
+    border-radius: 3px; /* Скругление углов полей */
+    font-size: 0.9rem; /*размер шрифта полей */
+}
+form textarea#id_description {
+            height: 120px; /* Фиксированная высота только для текстового поля Description */
+}
+
+form button {
+    margin-top: 10px; /*отступ сверху кнопки */
+    font-size: 0.9rem; /*размер шрифта кнопки */
+}

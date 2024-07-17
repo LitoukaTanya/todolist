@@ -1,15 +1,16 @@
 {% extends 'app/base.html' %}
 {% load static %}
-
+{% block style %}
+    <link rel="stylesheet" href="{% static 'css/styles_task_list.css' %}">
+{% endblock %}
 {% block content %}
     <div class="container mt-4">
-        <h1 class="mt-5">Task List</h1>
+        <h1 class="task-list-title">Task List</h1>
         {% if tasks %}
-        <table class="table table-bordered table-striped mt-5">
+        <table class="table table-bordered table-striped task-list-table">
             <thead>
                 <tr>
                     <th>Title</th>
-                    <th>Description</th>
                     <th>Status</th>
                     <th>Category</th>
                     <th>Priority</th>
@@ -20,7 +21,6 @@
                 {% for task in tasks %}
                 <tr>
                     <td><a href="{% url 'task_detail' task.id %}">{{ task.title }}</a></td>
-                    <td>{{ task.description }}</td>
                     <td>{{ task.status }}</td>
                     <td>{{ task.category.name }}</td>
                     <td>{{ task.priority.name }}</td>

@@ -1,0 +1,11 @@
+.task-list-title {
+    margin-top: 70px;
+}
+
+.task-list-table {
+    margin-top: 40px;
+}
+th, td {
+    word-wrap: break-word; /* Перенос слов для длинного текста */
+    word-break: break-all; /* Перенос длинного текста */
+}

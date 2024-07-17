@@ -2,7 +2,7 @@
 {% load static %}
 
 {% block style %}
-    <link rel="stylesheet" href="{% static 'css/styles.css' %}">
+    <link rel="stylesheet" href="{% static 'css/styles_task_detail.css' %}">
 {% endblock %}
 
 {% block content %}
@@ -13,10 +13,6 @@
             <tr>
                 <th>Title</th>
                 <td>{{ task.title }}</td>
-            </tr>
-            <tr>
-                <th>Description</th>
-                <td>{{ task.description }}</td>
             </tr>
             <tr>
                 <th>Status</th>
@@ -31,18 +27,26 @@
                 <td>{{ task.priority.name }}</td>
             </tr>
             <tr>
+                <th>Description</th>
+                <td>
+                        <div class="description-cell">
+                            {{ task.description }}
+                        </div>
+                </td>
+            </tr>
+            <tr>
                 <th>Completed</th>
                 <td>{{ task.completed_at}}</td>
             </tr>
         </table>
         
-        <p><a href="{% url 'update_task' task.id %}">Edit Task</a></p>
-        {% else %}
-        <p>Task not found or access denied.</p>
+        <div class="btn-container mt-3 d-flex justify-content-center">
+            <a href="{% url 'update_task' task.id %}" class="btn btn-primary mr-2">Edit</a>
+            <form action="{% url 'delete_task' task.id %}" method="post" onsubmit="return confirm('Вы уверены, что хотите удалить эту задачу?');">
+                {% csrf_token %}
+                <button type="submit" class="btn btn-danger">Delete</button>
+            </form>
+        </div>
         {% endif %}
-        <form action="{% url 'delete_task' task.id %}" method="post" onsubmit="return confirm('Are you sure you want to delete this task?');">
-            {% csrf_token %}
-            <button type="submit" class="btn btn-danger">Delete Task</button>
-        </form>
     </div>
 {% endblock %}
