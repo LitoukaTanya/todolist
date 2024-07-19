@@ -1,4 +1,4 @@
-from django.contrib.sites import requests
+# from django.contrib.sites import requests
 from django.shortcuts import render, get_object_or_404, redirect
 from rest_framework import status, generics
 from rest_framework.response import Response
@@ -7,7 +7,7 @@ from rest_framework.views import APIView
 from app.form import TaskForm
 from app.models import Task, Category, Priority
 from app.permissions import IsOwnerOrAdmin, IsAdminOrReadOnly
-from app.serializers import TaskSerializer, CategorySerializer, PrioritySerializer
+from app.serializers import TaskReadSerializer, TaskWriteSerializer, CategorySerializer, PrioritySerializer
 from django.contrib.auth.decorators import login_required
 import requests
 
@@ -15,12 +15,19 @@ import requests
 # представление для создания задачи
 class TaskCreateView(generics.CreateAPIView):
     queryset = Task.objects.all()
-    serializer_class = TaskSerializer
+
+    def get_serializer_class(self):
+        if self.request.method in ['POST', 'PUT', 'PATCH']:
+            return TaskWriteSerializer
+        return TaskReadSerializer
+
+    def perform_create(self, serializer):
+        serializer.save(created_by=self.request.user)
 
 
 # Представление для получения всех задач
 class TaskListView(generics.ListAPIView):
-    serializer_class = TaskSerializer
+    serializer_class = TaskReadSerializer
 
     def get_queryset(self):
         user = self.request.user
@@ -44,7 +51,7 @@ class TaskListView(generics.ListAPIView):
 
 # Представление для получения задач по категории
 class TaskListByCategory(generics.ListAPIView):
-    serializer_class = TaskSerializer
+    serializer_class = TaskReadSerializer
 
     def get_queryset(self):
         category_id = self.kwargs['pk']  # Получаем id категории из URL
@@ -56,7 +63,7 @@ class TaskListByCategory(generics.ListAPIView):
 
 # Представление для получения задач по приоритету
 class TaskListByPriority(generics.ListAPIView):
-    serializer_class = TaskSerializer
+    serializer_class = TaskReadSerializer
 
     def get_queryset(self):
         priority_id = self.kwargs['pk']
@@ -68,7 +75,7 @@ class TaskListByPriority(generics.ListAPIView):
 
 # Представление для получения конкретной задачи пользователя по ID
 class TaskUserById(generics.RetrieveAPIView):
-    serializer_class = TaskSerializer
+    serializer_class = TaskReadSerializer
     permission_classes = [IsOwnerOrAdmin]
 
     def get_queryset(self):
@@ -78,8 +85,12 @@ class TaskUserById(generics.RetrieveAPIView):
 # представление для обновления конкретной задачи
 class UpdateTaskView(generics.RetrieveUpdateAPIView):
     queryset = Task.objects.all()
-    serializer_class = TaskSerializer
     permission_classes = [IsOwnerOrAdmin]
+
+    def get_serializer_class(self):
+        if self.request.method in ['PUT', 'PATCH']:
+            return TaskWriteSerializer
+        return TaskReadSerializer
 
 
 # представление для удаление конкретной задачи
@@ -167,12 +178,38 @@ class PriorityDeleteView(APIView):
 def task_list(request):
     token = request.user.auth_token.key  # Получаем токен пользователя
     headers = {
-        'Authorization': f'Token {token}'
+        'Authorization': f'Token {token}',
+        'Content-Type': 'application/json'
     }
     response = requests.get('http://localhost:8000/api/task/listtask/', headers=headers)
     tasks = response.json() if response.status_code == 200 else []
 
-    return render(request, 'app/task_list.html', {'tasks': tasks})
+    if request.method == 'POST':
+        form = TaskForm(request.POST)
+        if form.is_valid():
+            data = {
+                'title': form.cleaned_data['title'],
+                'description': form.cleaned_data['description'],
+                'category': form.cleaned_data['category'].id,
+                'priority': form.cleaned_data['priority'].id,
+                'status': form.cleaned_data['status'],
+                'created_by': request.user.id
+            }
+            create_task_response = requests.post('http://localhost:8000/api/task/create/', headers=headers, json=data)
+            if create_task_response.status_code == status.HTTP_201_CREATED:
+                return redirect('task_list')
+    else:
+        form = TaskForm()
+
+    categories = Category.objects.filter(deleted=False)
+    priorities = Priority.objects.filter(deleted=False)
+
+    return render(request, 'app/task_list.html', {
+        'tasks': tasks,
+        'form': form,
+        'categories': categories,
+        'priorities': priorities
+    })
 
 
 @login_required
