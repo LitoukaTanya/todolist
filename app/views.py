@@ -3,6 +3,7 @@ from django.shortcuts import render, get_object_or_404, redirect
 from rest_framework import status, generics
 from rest_framework.response import Response
 from rest_framework.views import APIView
+from django.contrib import messages
 
 from app.form import TaskForm
 from app.models import Task, Category, Priority
@@ -230,10 +231,13 @@ def task_update(request, pk):
     if request.method == 'POST':
         form = TaskForm(request.POST, instance=task)
         if form.is_valid():
-            form.save()
-
-            # Перенаправление на страницу деталей задачи
-            return redirect('task_detail', pk=pk)
+            try:
+                form.save()
+                return redirect('task_detail', pk=pk)
+            except Exception as e:
+                form.add_error(None, str(e))
+        else:
+            form.add_error(None, 'Please correct the errors below.')
     else:
         form = TaskForm(instance=task)
 

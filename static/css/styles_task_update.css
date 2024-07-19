@@ -6,7 +6,7 @@ div.container {
     padding: 20px;
     border-radius: 10px;
     box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
-    margin-top: 90px;
+    margin-top: 95px;
 }
 
 h1 {
@@ -45,4 +45,13 @@ form textarea#id_description {
 form button {
     margin-top: 10px; /*отступ сверху кнопки */
     font-size: 0.9rem; /*размер шрифта кнопки */
+}
+
+.custom-alert {
+    font-size: 1rem; /* Размера шрифта */
+    padding: 5px 5px; /* Внутренний отступ сверху/снизу и по бокам */
+    margin-bottom: 10px; /* Внешний отступ снизу */
+    line-height: 1; /* Высота строки */
+    border-radius: 3px; /* Скругление углов */
+    overflow: hidden; /* Скрыть переполняющий контент, если необходимо */
 }

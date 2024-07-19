@@ -6,7 +6,14 @@
 {% endblock %}
 
 {% block content %}
-    <div class="container">
+    <div class="container mt-5">
+        <!-- Display form errors -->
+        {% if form.non_field_errors %}
+            <div class="alert alert-danger custom-alert">
+                {{ form.non_field_errors }}
+            </div>
+        {% endif %}
+
         <h1>Edit Task</h1>
         <form method="post">
             {% csrf_token %}

@@ -1,3 +1,4 @@
+from django.core.exceptions import ValidationError
 from django.utils import timezone
 from django.contrib.auth.models import User
 from django.db import models
@@ -64,6 +65,29 @@ class Task(models.Model):
     deleted = models.BooleanField(default=False)
     category = models.ForeignKey(Category, on_delete=models.CASCADE)
     priority = models.ForeignKey(Priority, on_delete=models.CASCADE)
+
+    def clean(self):
+        # Валидация поля completed и status
+        if self.completed and self.status != 'completed':
+            raise ValidationError("If 'completed' is True, 'status' must be 'completed'.")
+        if not self.completed and self.status == 'completed':
+            raise ValidationError("If 'status' is 'completed', 'completed' must be True.")
+
+    def save(self, *args, **kwargs):
+        # Синхронизация поля status с completed
+        if self.completed:
+            self.status = 'completed'
+            if not self.completed_at:
+                self.completed_at = timezone.now()
+        else:
+            if self.status == 'completed':
+                self.completed = True
+                if not self.completed_at:
+                    self.completed_at = timezone.now()
+            elif self.status != 'completed':
+                self.completed_at = None
+
+        super(Task, self).save(*args, **kwargs)
 
     def soft_delete(self):
         self.deleted = True
