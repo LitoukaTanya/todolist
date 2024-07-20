@@ -10,6 +10,7 @@
         <table class="table table-bordered table-striped task-list-table">
             <thead>
                 <tr>
+                    <th>Completed</th>
                     <th>Title</th>
                     <th>Status</th>
                     <th>Category</th>
@@ -20,8 +21,21 @@
             <tbody>
                 {% for task in tasks %}
                 <tr>
+                    <td>
+                        {% if task.completed %}
+                            <label class="checkbox-label">
+                                <input type="checkbox" disabled checked>
+                                <span class="custom-checkbox"></span>
+                            </label>
+                        {% else %}
+                            <label class="checkbox-label">
+                                <input type="checkbox" disabled>
+                                <span class="custom-checkbox"></span>
+                            </label>
+                        {% endif %}
+                    </td>
                     <td><a href="{% url 'task_detail' task.id %}">{{ task.title }}</a></td>
-                    <td>{{ task.status }}</td>
+                    <td>{{ task.status_display }}</td>
                     <td>{{ task.category.name }}</td>
                     <td>{{ task.priority.name }}</td>
                     <td>

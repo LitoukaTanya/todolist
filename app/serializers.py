@@ -18,11 +18,15 @@ class PrioritySerializer(serializers.ModelSerializer):
 class TaskReadSerializer(serializers.ModelSerializer):
     category = CategorySerializer(read_only=True)
     priority = PrioritySerializer(read_only=True)
+    status_display = serializers.SerializerMethodField()
 
     class Meta:
         model = Task
         fields = ('id', 'title', 'description', 'status', 'completed', 'created_at', 'completed_at', 'updated_at',
-                  'deleted_at', 'deleted', 'created_by', 'category', 'priority')
+                  'deleted_at', 'deleted', 'created_by', 'category', 'priority', 'status_display')
+
+    def get_status_display(self, obj):
+        return obj.get_status_display()
 
 
 class TaskWriteSerializer(serializers.ModelSerializer):

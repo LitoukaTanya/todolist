@@ -3,7 +3,6 @@ from django.shortcuts import render, get_object_or_404, redirect
 from rest_framework import status, generics
 from rest_framework.response import Response
 from rest_framework.views import APIView
-from django.contrib import messages
 
 from app.form import TaskForm
 from app.models import Task, Category, Priority
@@ -40,8 +39,7 @@ class TaskListView(generics.ListAPIView):
 # Представление для получения всех задач по статусу
 # class TaskListByStatus(generics.ListAPIView):
 #     serializer_class = TaskSerializer
-#     permission_classes = [IsAuthenticated]
-#
+
 # def get_queryset(self):
 #     status = self.request.query_params.get('status')
 #     if status:
@@ -184,7 +182,6 @@ def task_list(request):
     }
     response = requests.get('http://localhost:8000/api/task/listtask/', headers=headers)
     tasks = response.json() if response.status_code == 200 else []
-
     if request.method == 'POST':
         form = TaskForm(request.POST)
         if form.is_valid():
