@@ -3,6 +3,7 @@ from django.shortcuts import render, get_object_or_404, redirect
 from rest_framework import status, generics
 from rest_framework.response import Response
 from rest_framework.views import APIView
+from django.views.decorators.http import require_POST
 
 from app.form import TaskForm
 from app.models import Task, Category, Priority
@@ -256,3 +257,15 @@ def task_delete(request, pk):
             return redirect('task_detail', pk=pk)
     else:
         return redirect('task_detail', pk=pk)
+
+
+@login_required
+@require_POST
+def update_task_status(request, pk):
+    task = get_object_or_404(Task, pk=pk)
+    if request.user == task.created_by or request.user.is_staff:
+        completed = request.POST.get('completed') == 'true'
+        task.completed = completed
+        task.status = 'completed' if completed else 'pending'
+        task.save()
+    return redirect('task_list')

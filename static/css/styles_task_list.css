@@ -15,33 +15,3 @@ th, td {
     text-align: center; /* Выравнивание текста по центру */
     vertical-align: middle; /* Вертикальное выравнивание по центру */
 }
-.checkbox-label input[type="checkbox"] {
-    display: none; /* Скрыть стандартный чекбокс */
-}
-.checkbox-label input[type="checkbox"] + .custom-checkbox {
-    display: inline-block;
-    width: 20px;
-    height: 20px;
-    background-color: #fff;
-    border: 1px solid #ccc;
-    border-radius: 3px;
-    position: relative;
-    cursor: pointer;
-}
-
-.checkbox-label input[type="checkbox"]:checked + .custom-checkbox {
-    background-color: #28a745; /* Зелёный цвет фона */
-    border-color: #28a745; /* Зелёный цвет границы */
-}
-
-.checkbox-label input[type="checkbox"]:checked + .custom-checkbox:before {
-    content: '';
-    position: absolute;
-    top: 3px;
-    left: 7px;
-    width: 5px;
-    height: 10px;
-    border: solid white;
-    border-width: 0 2px 2px 0;
-    transform: rotate(45deg);
-}

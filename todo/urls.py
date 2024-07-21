@@ -5,7 +5,7 @@ from django.conf import settings
 from django.contrib.auth import views as auth_views
 
 
-from app.views import task_list, task_detail, task_update, task_delete
+from app.views import task_list, task_detail, task_update, task_delete,update_task_status
 
 urlpatterns = [
     path('admin/', admin.site.urls),
@@ -22,6 +22,7 @@ urlpatterns += [
     path('task/<int:pk>/', task_detail, name='task_detail'),
     path('task/update/<int:pk>/', task_update, name='update_task'),
     path('task/delete/<int:pk>/', task_delete, name='delete_task'),
+    path('task/<int:pk>/status/', update_task_status, name='update_task_status')
 ]
 
 urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
