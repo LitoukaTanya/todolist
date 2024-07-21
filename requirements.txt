@@ -3,3 +3,4 @@ djangorestframework==3.15.2
 dj-rest-auth==6.0.0
 pillow==10.2.0
 requests~=2.32.3
+django-filter~=24.2

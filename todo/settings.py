@@ -32,6 +32,7 @@ INSTALLED_APPS = [
     'app',
     'users',
     'dj_rest_auth',
+    'django_filters',
 ]
 
 MIDDLEWARE = [

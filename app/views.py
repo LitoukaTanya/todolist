@@ -1,10 +1,12 @@
 # from django.contrib.sites import requests
 from django.shortcuts import render, get_object_or_404, redirect
+from django_filters.rest_framework import DjangoFilterBackend
 from rest_framework import status, generics
 from rest_framework.response import Response
 from rest_framework.views import APIView
 from django.views.decorators.http import require_POST
 
+from app.filters import TaskFilter
 from app.form import TaskForm
 from app.models import Task, Category, Priority
 from app.permissions import IsOwnerOrAdmin, IsAdminOrReadOnly
@@ -29,6 +31,8 @@ class TaskCreateView(generics.CreateAPIView):
 # Представление для получения всех задач
 class TaskListView(generics.ListAPIView):
     serializer_class = TaskReadSerializer
+    filter_backends = (DjangoFilterBackend,)
+    filterset_class = TaskFilter
 
     def get_queryset(self):
         user = self.request.user
