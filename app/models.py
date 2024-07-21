@@ -101,6 +101,7 @@ class Task(models.Model):
         return self.title
 
 
+# Сигнал для создания токена аутентификации при создании пользователя
 @receiver(post_save, sender=settings.AUTH_USER_MODEL)
 def create_auth_token(sender, instance=None, created=False, **kwargs):
     if created:

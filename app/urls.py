@@ -3,12 +3,12 @@ from django.urls import path
 from app.views import TaskCreateView, TaskListView, TaskListByCategory, TaskListByPriority, \
     TaskUserById, UpdateTaskView, DeleteTaskView, CategoryCreateView, GetCategoryById, UpdateCategoryView, \
     DeleteCategoryView, PriorityCreateView, PriorityGetById, PriorityUpdateView, PriorityDeleteView, task_list, \
-    task_detail
+    task_detail, TaskListByStatus
 
 urlpatterns = [
     path('create/', TaskCreateView.as_view(), name='task_create'),
     path('listtask/', TaskListView.as_view(), name='task_list'),
-    # path('listtask/status/', TaskListByStatus.as_view(), name='task_status'),
+    path('listtask/status/', TaskListByStatus.as_view(), name='task_status'),
     path('listtask/category/<int:pk>/', TaskListByCategory.as_view(), name='task_category'),
     path('listtask/priority/<int:pk>/', TaskListByPriority.as_view(), name='task_priority'),
     path('<int:pk>/', TaskUserById.as_view(), name='task_id'),

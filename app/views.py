@@ -23,7 +23,7 @@ class TaskCreateView(generics.CreateAPIView):
         return TaskReadSerializer
 
     def perform_create(self, serializer):
-        serializer.save(created_by=self.request.user)
+        serializer.save(created_by=self.request.user)   # Автоматическое назначение пользователя, создавшего задачу
 
 
 # Представление для получения всех задач
@@ -33,20 +33,26 @@ class TaskListView(generics.ListAPIView):
     def get_queryset(self):
         user = self.request.user
         if user.is_staff:
-            return Task.objects.filter(deleted=False)
-        return Task.objects.filter(created_by=user, deleted=False)
+            return Task.objects.filter(deleted=False)   # Все задачи для админов
+        return Task.objects.filter(created_by=user, deleted=False)  # Задачи только текущего пользователя
 
 
-# Представление для получения всех задач по статусу
-# class TaskListByStatus(generics.ListAPIView):
-#     serializer_class = TaskSerializer
+class TaskListByStatus(generics.ListAPIView):
+    serializer_class = TaskReadSerializer
 
-# def get_queryset(self):
-#     status = self.request.query_params.get('status')
-#     if status:
-#         return Task.objects.filter(status=status)
-#     else:
-#         return Task.objects.none()
+    def get_queryset(self):
+
+        status_param = self.request.query_params.get('status')  # Получаем статус из параметров запроса
+        if status_param is None:
+            return Task.objects.none()  # Если статус не передан, возвращаем пустой QuerySet
+
+        user = self.request.user
+        if user.is_staff:
+            # Если пользователь администратор, возвращаем все задачи с указанным статусом
+            return Task.objects.filter(status=status_param, deleted=False)
+        else:
+            # Если обычный пользователь, возвращаем только его задачи с указанным статусом
+            return Task.objects.filter(created_by=user, status=status_param, deleted=False)
 
 
 # Представление для получения задач по категории
