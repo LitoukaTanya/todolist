@@ -1,8 +1,14 @@
 {% extends 'app/base.html' %}
 {% load static %}
+
 {% block style %}
     <link rel="stylesheet" href="{% static 'css/styles_task_list.css' %}">
 {% endblock %}
+
+{% block title %}
+    <title>Task List</title>
+{% endblock %}
+
 {% block content %}
     <div class="container mt-4">
         <h1 class="task-list-title">Task List</h1>
@@ -25,7 +31,9 @@
                         <form method="post" action="{% url 'update_task_status' task.id %}" style="display:inline;">
                             {% csrf_token %}
                             <input type="hidden" name="completed" value="false">
-                            <input type="checkbox" name="completed" value="true" {% if task.completed %}checked{% endif %} onchange="this.form.submit()">
+                            <label>
+                                <input type="checkbox" name="completed" value="true" {% if task.completed %}checked{% endif %} onchange="this.form.submit()">
+                            </label>
                         </form>
                     </td>
                     <td><a href="{% url 'task_detail' task.id %}">{{ task.title }}</a></td>
