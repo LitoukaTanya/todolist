@@ -3,4 +3,8 @@ from .models import Category, Priority, Task
 
 admin.site.register(Category)
 admin.site.register(Priority)
-admin.site.register(Task)
+
+
+@admin.register(Task)
+class TaskAdmin(admin.ModelAdmin):
+    list_display = ('title', 'category', 'priority', 'status', 'completed')

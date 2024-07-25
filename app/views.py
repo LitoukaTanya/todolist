@@ -1,4 +1,5 @@
 # from django.contrib.sites import requests
+from django.contrib import messages
 from django.shortcuts import render, get_object_or_404, redirect
 from django_filters.rest_framework import DjangoFilterBackend
 from rest_framework import status, generics
@@ -107,6 +108,9 @@ class UpdateTaskView(generics.RetrieveUpdateAPIView):
 class DeleteTaskView(APIView):
 
     def delete(self, request, pk, *args, **kwargs):
+        """
+
+        """
         task = get_object_or_404(Task, pk=pk)
         if request.user == task.created_by or request.user.is_staff:
             if request.user.is_staff:
@@ -264,9 +268,7 @@ def task_delete(request, pk):
         if response.status_code == 204:
             return redirect('task_list')
         else:
-            return redirect('task_detail', pk=pk)
-    else:
-        return redirect('task_detail', pk=pk)
+            messages.error(request, 'Failed to delete the task. Please try again.')
 
 
 @login_required

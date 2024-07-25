@@ -5,7 +5,7 @@ from django.conf import settings
 from django.contrib.auth import views as auth_views
 
 
-from app.views import task_list, task_detail, task_update, task_delete,update_task_status
+from app.views import task_list, task_detail, task_update, task_delete, update_task_status
 
 urlpatterns = [
     path('admin/', admin.site.urls),
