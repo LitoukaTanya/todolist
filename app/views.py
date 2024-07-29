@@ -26,7 +26,7 @@ class TaskCreateView(generics.CreateAPIView):
         return TaskReadSerializer
 
     def perform_create(self, serializer):
-        serializer.save(created_by=self.request.user)   # Автоматическое назначение пользователя, создавшего задачу
+        serializer.save(created_by=self.request.user)  # Автоматическое назначение пользователя, создавшего задачу
 
 
 # Представление для получения всех задач
@@ -38,7 +38,7 @@ class TaskListView(generics.ListAPIView):
     def get_queryset(self):
         user = self.request.user
         if user.is_staff:
-            return Task.objects.filter(deleted=False)   # Все задачи для админов
+            return Task.objects.filter(deleted=False)  # Все задачи для админов
         return Task.objects.filter(created_by=user, deleted=False)  # Задачи только текущего пользователя
 
 
