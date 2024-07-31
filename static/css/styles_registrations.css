@@ -1,0 +1,30 @@
+body {
+    background-image: url('/static/images/background.jpg');
+    background-size: cover;
+    background-position: center;
+    background-repeat: no-repeat;
+    min-height: 100vh; /* Чтобы фон занимал всю высоту экрана */
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.card {
+    background-color: rgba(255, 255, 255, 0.8); /* Прозрачный фон карточки */
+}
+
+.form-container h2 {
+    margin-bottom: 20px;
+}
+
+.form-control.is-invalid {
+    border-color: #dc3545;
+}
+
+.form-control.is-valid {
+    border-color: #28a745;
+}
+
+.invalid-feedback {
+    display: block;
+}
