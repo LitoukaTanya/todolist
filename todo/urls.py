@@ -19,6 +19,7 @@ urlpatterns = [
     path('register/', register, name='register'),
 
     path('', task_list, name='task_list'),
+    path('task/', include('app.urls')),
     path('task/<int:pk>/', task_detail, name='task_detail'),
     path('task/update/<int:pk>/', task_update, name='update_task'),
     path('task/delete/<int:pk>/', task_delete, name='delete_task'),

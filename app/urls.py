@@ -1,26 +1,11 @@
-# from django.urls import path
-#
-# from app.views import TaskCreateView, TaskListView, TaskListByCategory, TaskListByPriority, \
-#     TaskUserById, UpdateTaskView, DeleteTaskView, CategoryCreateView, GetCategoryById, UpdateCategoryView, \
-#     DeleteCategoryView, PriorityCreateView, PriorityGetById, PriorityUpdateView, PriorityDeleteView, task_list, \
-#     task_detail, TaskListByStatus
-#
-# urlpatterns = [
-#     path('tasl/create/', TaskCreateView.as_view(), name='task_create'),
-#     path('tasl/listtask/', TaskListView.as_view(), name='task_list'),
-#     path('tasl/listtask/status/', TaskListByStatus.as_view(), name='task_status'),
-#     path('tasl/listtask/category/<int:pk>/', TaskListByCategory.as_view(), name='task_category'),
-#     path('tasl/listtask/priority/<int:pk>/', TaskListByPriority.as_view(), name='task_priority'),
-#     path('tasl/<int:pk>/', TaskUserById.as_view(), name='task_id'),
-#     path('tasl/update/<int:pk>/', UpdateTaskView.as_view(), name='task_update'),
-#     path('tasl/delete/<int:pk>/', DeleteTaskView.as_view(), name='task_delete'),
-#     path('category/create/', CategoryCreateView.as_view(), name='category_create'),
-#     path('category/<int:pk>/', GetCategoryById.as_view(), name='category_get'),
-#     path('category/update/<int:pk>/', UpdateCategoryView.as_view(), name='category_update'),
-#     path('category/delete/<int:pk>/', DeleteCategoryView.as_view(), name='category_delete'),
-#     path('priority/create/', PriorityCreateView.as_view(), name='task_priority_create'),
-#     path('priority/<int:pk>/', PriorityGetById.as_view(), name='task_priority_get'),
-#     path('priority/update/<int:pk>/', PriorityUpdateView.as_view(), name='task_priority_update'),
-#     path('priority/delete/<int:pk>/', PriorityDeleteView.as_view(), name='priority_delete'),
-#
-# ]
+from django.urls import path
+
+from app.views import task_detail, task_update, task_delete, update_task_status
+
+urlpatterns = [
+    path('<int:pk>/', task_detail, name='task_detail'),
+    path('update/<int:pk>/', task_update, name='update_task'),
+    path('delete/<int:pk>/', task_delete, name='delete_task'),
+    path('<int:pk>/status/', update_task_status, name='update_task_status')
+
+]
