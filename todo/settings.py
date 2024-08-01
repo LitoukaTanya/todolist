@@ -30,14 +30,14 @@ INSTALLED_APPS = [
     'rest_framework',
     'rest_framework.authtoken',
     'app',
-    'users',
     'dj_rest_auth',
     'django_filters',
     'django.contrib.sites',
     'allauth',
     'allauth.account',
     'allauth.socialaccount',
-    'dj_rest_auth.registration'
+    'dj_rest_auth.registration',
+    'api'
 ]
 
 EMAIL_BACKEND = 'django.core.mail.backends.console.EmailBackend'
